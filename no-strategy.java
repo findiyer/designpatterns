@@ -1,64 +1,38 @@
-// Strategy interface
-interface PaymentStrategy {
-    void pay(double amount);
-}
-
-// Concrete Strategy
-class CreditCardPayment implements PaymentStrategy {
-    @Override
-    public void pay(double amount) {
-        System.out.println("Paying $" + amount + " with credit card.");
-    }
-}
-
-// Concrete Strategy
-class PayPalPayment implements PaymentStrategy {
-    @Override
-    public void pay(double amount) {
-        System.out.println("Paying $" + amount + " with PayPal.");
-    }
-}
-
-// Concrete Strategy
-class CashPayment implements PaymentStrategy {
-    @Override
-    public void pay(double amount) {
-        System.out.println("Paying $" + amount + " with cash.");
-    }
-}
-
 // Context class
 class ShoppingCart {
-    private PaymentStrategy paymentStrategy;
+    private String paymentMethod;
 
-    public ShoppingCart(PaymentStrategy paymentStrategy) {
-        this.paymentStrategy = paymentStrategy;
-    }
-
-    public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
-        this.paymentStrategy = paymentStrategy;
+    public ShoppingCart(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public void pay(double amount) {
-        paymentStrategy.pay(amount);
+        if (paymentMethod.equalsIgnoreCase("credit card")) {
+            System.out.println("Paying $" + amount + " with credit card.");
+        } else if (paymentMethod.equalsIgnoreCase("paypal")) {
+            System.out.println("Paying $" + amount + " with PayPal.");
+        } else if (paymentMethod.equalsIgnoreCase("cash")) {
+            System.out.println("Paying $" + amount + " with cash.");
+        } else {
+            System.out.println("Payment method not supported.");
+        }
     }
 }
 
 // Client code
 public class Main {
     public static void main(String[] args) {
-        PaymentStrategy creditCardPayment = new CreditCardPayment();
-        PaymentStrategy payPalPayment = new PayPalPayment();
-        PaymentStrategy cashPayment = new CashPayment();
-
-        ShoppingCart cart1 = new ShoppingCart(creditCardPayment);
+        ShoppingCart cart1 = new ShoppingCart("credit card");
         cart1.pay(100);
 
-        cart1.setPaymentStrategy(payPalPayment);
-        cart1.pay(50);
+        ShoppingCart cart2 = new ShoppingCart("paypal");
+        cart2.pay(50);
 
-        cart1.setPaymentStrategy(cashPayment);
-        cart1.pay(75);
+        ShoppingCart cart3 = new ShoppingCart("cash");
+        cart3.pay(75);
+
+        ShoppingCart cart4 = new ShoppingCart("bitcoin"); // Unsupported payment method
+        cart4.pay(200);
     }
 }
 
